@@ -1,3 +1,5 @@
+import { userMemberStore } from "@/stores";
+
 const baseURL = 'http://localhost:8080';
 
 // 配置拦截器
@@ -15,3 +17,45 @@ const httpInterceptor = {
     }
 }
 uni.addInterceptor('request',httpInterceptor)
+
+// 配置请求返回值类型
+interface Data<T>{
+    code:string
+    msg:string
+    result:T
+}
+
+// 配置请求函数
+
+export const http = <T>(options:UniApp.RequestOptions)=>{
+    return new Promise<Data<T>>((resolve,reject)=>{
+        uni.request({
+            ...options,
+            success(res){
+                if(res.statusCode >= 200 && res.statusCode < 300){
+                    // 获取数据成功，将结果进行包装并返回
+                    resolve(res.data as Data<T>)
+                }else if(res.statusCode === 401){
+                    // 401错误 清理用户信息，并跳转登陆页
+                    userMemberStore().clearProfile();
+                    uni.navigateTo({url:'/pages/index/index'});
+                    reject(res);
+                }else{
+                    // 其他错误,进行提示
+                    uni.showToast({
+                        icon:'none',
+                        title:(res.data as Data<T>).msg || '请求错误'
+                    })
+                    reject(res);
+                }
+            },
+            fail(err){
+                uni.showToast({
+                    icon:'none',
+                    title:'网络错误'
+                })
+                reject(err)
+            }
+        })
+    })
+}
