@@ -1,7 +1,6 @@
-import { userMemberStore } from "@/stores";
+import { useMemberStore } from "@/stores";
 
 const baseURL = 'http://localhost:8080';
-
 // 配置拦截器
 
 const httpInterceptor = {
@@ -12,6 +11,16 @@ const httpInterceptor = {
         }
         // 设置超时时间，默认是60s
         options.timeout =  10000;
+        options.header = {
+            ...options.header,
+            'source-client': 'miniapp',
+          }
+          // 4. 添加 token 请求头标识
+          const memberStore = useMemberStore();
+          const token = memberStore.profile?.token
+          if (token) {
+            options.header.Authorization = token
+          }
         // 打印下请求
         console.log(options)
     }
