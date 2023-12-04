@@ -1,11 +1,54 @@
 <script setup lang="ts">
 import type {GuessItem} from "@/types/home";
+import type { PageParams } from '@/types/global'
+import { getHomeGoodsGuessLikeAPI } from '@/services/home'
+import {ref,onMounted} from 'vue';
+// 获取猜你喜欢的数据
+const homeGoodsGuessLikeList = ref<GuessItem[]>([]);
+const pageParams : Required<PageParams> ={
+  page:1,
+  pageSize:10
+}
+// 结束标记
+const finish = ref(false);
+const getHomeGoodsGuessLikeData =async () => {
+  if(finish.value === true){
+    return uni.showToast({
+      icon:'none',
+      title:'没有更多数据'
+    })
+  }
+  const res = await getHomeGoodsGuessLikeAPI(pageParams);
+  // 追加数据
+  homeGoodsGuessLikeList.value?.push(...res.result.items);
+  console.log(homeGoodsGuessLikeList)
+  // 累加页码
+  if(pageParams.page < res.result.pages){
+    pageParams.page++;
+  }else{
+    // 分页数据查询完
+    finish.value = true;
+  }
+}
+
+// 重置数据
+const resetData = ()=>{
+  pageParams.page = 1;
+  homeGoodsGuessLikeList.value = [];
+  finish.value = false;
+}
 
 
-// 定义props 接收
-defineProps<{
-  list:GuessItem[]
-}>()
+// 组件挂载完毕时执行
+onMounted(()=>{
+  getHomeGoodsGuessLikeData()
+})
+
+//暴露方法
+defineExpose({
+  resetData: resetData,
+  getMore: getHomeGoodsGuessLikeData
+})
 </script>
 
 <template>
@@ -16,7 +59,7 @@ defineProps<{
   <view class="guess">
     <navigator
       class="guess-item"
-      v-for="item in list"
+      v-for="item in homeGoodsGuessLikeList"
       :key="item.id"
       :url="`/pages/goods/goods?id=` + item.id"
     >
@@ -32,7 +75,7 @@ defineProps<{
       </view>
     </navigator>
   </view>
-  <view class="loading-text"> 正在加载... </view>
+  <view class="loading-text"> {{ finish ?'没有更多数据':'正在加载' }} </view>
 </template>
 
 <style lang="scss">
@@ -72,7 +115,7 @@ defineProps<{
   justify-content: space-between;
   padding: 0 20rpx;
   .guess-item {
-    width: 345rpx;
+    width: 40%;
     padding: 24rpx 20rpx 20rpx;
     margin-bottom: 20rpx;
     border-radius: 10rpx;
