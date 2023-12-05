@@ -115,7 +115,7 @@ defineExpose({
   justify-content: space-between;
   padding: 0 20rpx;
   .guess-item {
-    width: 40%;
+    width: 42%;
     padding: 24rpx 20rpx 20rpx;
     margin-bottom: 20rpx;
     border-radius: 10rpx;
