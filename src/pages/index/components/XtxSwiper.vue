@@ -43,7 +43,7 @@ defineProps<{
   </view>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .carousel {
   height: 280rpx;
   position: relative;
