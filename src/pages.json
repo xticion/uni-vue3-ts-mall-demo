@@ -20,6 +20,12 @@
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
 		}
 	],
 	"globalStyle": {
@@ -29,12 +35,15 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
-		"list": [{
-			"pagePath": "pages/index/index",
-			"text": "主页"
-		},{
-			"pagePath": "pages/my/my",
-			"text": "我的"
-		}]
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "主页"
+			},
+			{
+				"pagePath": "pages/login/login",
+				"text": "我的"
+			}
+		]
 	}
 }

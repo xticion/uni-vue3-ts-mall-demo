@@ -1,10 +1,10 @@
 import persist from 'pinia-plugin-persistedstate'
-import {createPinia} from 'pinia'
+import { createPinia } from 'pinia'
 
-const pinia = createPinia();
+const pinia = createPinia()
 
-pinia.use(persist);
+pinia.use(persist)
 
-export default pinia;
+export default pinia
 
-export * from './modules/member';
+export * from './modules/member'

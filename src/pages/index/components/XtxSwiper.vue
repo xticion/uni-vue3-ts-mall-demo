@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type {SwiperItem} from '@/types/home.d.ts'
-import {ref} from 'vue'
+import type { SwiperItem } from '@/types/home.d.ts'
+import { ref } from 'vue'
 
 // ref 用于创建响应式数据，在发生改变时会重新触发渲染
 // const 和let声明变量的区别在于，const声明的变量不可变，而let声明的变量可变
@@ -16,7 +16,7 @@ const onChange: UniHelper.SwiperOnChange = (ev) => {
 
 // 定义props 接收
 defineProps<{
-  list:SwiperItem[]
+  list: SwiperItem[]
 }>()
 </script>
 

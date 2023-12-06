@@ -1,53 +1,52 @@
 <script setup lang="ts">
-import type {GuessItem} from "@/types/home";
+import type { GuessItem } from '@/types/home'
 import type { PageParams } from '@/types/global'
 import { getHomeGoodsGuessLikeAPI } from '@/services/home'
-import {ref,onMounted} from 'vue';
+import { ref, onMounted } from 'vue'
 // 获取猜你喜欢的数据
-const homeGoodsGuessLikeList = ref<GuessItem[]>([]);
-const pageParams : Required<PageParams> ={
-  page:1,
-  pageSize:10
+const homeGoodsGuessLikeList = ref<GuessItem[]>([])
+const pageParams: Required<PageParams> = {
+  page: 1,
+  pageSize: 10,
 }
 // 结束标记
-const finish = ref(false);
-const getHomeGoodsGuessLikeData =async () => {
-  if(finish.value === true){
+const finish = ref(false)
+const getHomeGoodsGuessLikeData = async () => {
+  if (finish.value === true) {
     return uni.showToast({
-      icon:'none',
-      title:'没有更多数据'
+      icon: 'none',
+      title: '没有更多数据',
     })
   }
-  const res = await getHomeGoodsGuessLikeAPI(pageParams);
+  const res = await getHomeGoodsGuessLikeAPI(pageParams)
   // 追加数据
-  homeGoodsGuessLikeList.value?.push(...res.result.items);
+  homeGoodsGuessLikeList.value?.push(...res.result.items)
   console.log(homeGoodsGuessLikeList)
   // 累加页码
-  if(pageParams.page < res.result.pages){
-    pageParams.page++;
-  }else{
+  if (pageParams.page < res.result.pages) {
+    pageParams.page++
+  } else {
     // 分页数据查询完
-    finish.value = true;
+    finish.value = true
   }
 }
 
 // 重置数据
-const resetData = ()=>{
-  pageParams.page = 1;
-  homeGoodsGuessLikeList.value = [];
-  finish.value = false;
+const resetData = () => {
+  pageParams.page = 1
+  homeGoodsGuessLikeList.value = []
+  finish.value = false
 }
 
-
 // 组件挂载完毕时执行
-onMounted(()=>{
+onMounted(() => {
   getHomeGoodsGuessLikeData()
 })
 
 //暴露方法
 defineExpose({
   resetData: resetData,
-  getMore: getHomeGoodsGuessLikeData
+  getMore: getHomeGoodsGuessLikeData,
 })
 </script>
 
@@ -63,11 +62,7 @@ defineExpose({
       :key="item.id"
       :url="`/pages/goods/goods?id=` + item.id"
     >
-      <image
-        class="image"
-        mode="aspectFill"
-        :src="item.picture"
-      ></image>
+      <image class="image" mode="aspectFill" :src="item.picture"></image>
       <view class="name"> {{ item.desc }} </view>
       <view class="price">
         <text class="small">¥</text>
@@ -75,7 +70,7 @@ defineExpose({
       </view>
     </navigator>
   </view>
-  <view class="loading-text"> {{ finish ?'没有更多数据':'正在加载' }} </view>
+  <view class="loading-text"> {{ finish ? '没有更多数据' : '正在加载' }} </view>
 </template>
 
 <style lang="scss">

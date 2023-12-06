@@ -1,9 +1,9 @@
 <template>
-  <view class="navbar" :style="{paddingTop: safeAreaInsets?.top + 'px'}">
-    <view  class="logo">
-        <!-- logo文字 -->
-        <image class="logo-image" src="@/static/logo.png" />  
-        <text class="logo-text">新鲜 · 亲民 · 快捷</text>
+  <view class="navbar" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
+    <view class="logo">
+      <!-- logo文字 -->
+      <image class="logo-image" src="@/static/logo.png" />
+      <text class="logo-text">新鲜 · 亲民 · 快捷</text>
     </view>
     <view>
       <!-- 搜索条 -->
@@ -12,10 +12,9 @@
 </template>
 
 <script lang="ts" setup>
-  // 获取屏幕边界到安全区域的距离，用于导航栏高度的适配
-  const {safeAreaInsets} = uni.getSystemInfoSync();
-  console.log(safeAreaInsets?.bottom)
-
+// 获取屏幕边界到安全区域的距离，用于导航栏高度的适配
+const { safeAreaInsets } = uni.getSystemInfoSync()
+console.log(safeAreaInsets?.bottom)
 </script>
 
 <style lang="scss" scoped>
