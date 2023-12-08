@@ -2,10 +2,26 @@
 import {ref} from 'vue';
 import { getGoodsByIdAPI } from '@/services/goods';
 import type { GoodsResult } from '@/types/goods';
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app';
+import ServicePanel from './components/ServicePanel.vue';
 const query = defineProps<{
   id:string
 }>()
+
+// uni-ui 弹出层组件 
+const popup = ref<{
+  open:(type?:UniHelper.UniPopupType) =>void
+  close:()=>void
+}>()
+
+const popupName = ref<'service'>();
+const openPopup = (name:typeof popupName.value) =>{
+  console.log(popup)
+  // 修改弹出层名称
+  popupName.value = name;
+  popup.value?.open;
+
+}
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -44,7 +60,7 @@ onLoad(()=>{
       <view class="preview">
         <swiper  circular @change="onSwiperChange">
           <swiper-item  v-for="item in goods?.mainPictures" :key="item">
-            <image
+            <image class="image"
               @tap="onTapImage(item)"
               mode="aspectFill"
               :src="item"
@@ -74,17 +90,16 @@ onLoad(()=>{
           <text class="label">选择</text>
           <text class="text ellipsis"> 请选择商品规格 </text>
         </view>
-        <view class="item arrow">
+        <!-- <view class="item arrow">
           <text class="label">送至</text>
           <text class="text ellipsis"> 请选择收获地址 </text>
-        </view>
-        <view class="item arrow">
+        </view> -->
+        <view class="item arrow" @tap="openPopup('service')">
           <text class="label">服务</text>
           <text class="text ellipsis"> 无忧退 快速退款 免费包邮 </text>
         </view>
       </view>
     </view>
-
     <!-- 商品详情 -->
     <view class="detail panel">
       <view class="title">
@@ -148,6 +163,10 @@ onLoad(()=>{
       <view class="buynow"> 立即购买 </view>
     </view>
   </view>
+  <uni-popup ref="popup" type="bottom" background-color="#fff">
+      <!-- <AddressPanel v-if="popupName === 'address'" @close="popup?.close()" /> -->
+      <ServicePanel v-if="popupName === 'service'" @close="popup?.close()" />
+    </uni-popup>
 </template>
 
 <style lang="scss" scoped>
@@ -206,6 +225,10 @@ page {
   .preview {
     height: 750rpx;
     position: relative;
+    swiper{
+      width: 750rpx;
+      height: 750rpx;
+    }
     .image {
       width: 750rpx;
       height: 750rpx;
