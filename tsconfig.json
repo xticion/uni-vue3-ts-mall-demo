@@ -1,6 +1,7 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
@@ -20,7 +21,7 @@
     ]
   },
   "vueCompilerOptions": {
-    "experimentalRuntimeMode":"runtime-uni-app"
+    "nativeTags": ["block", "component", "template", "slot"]
   },
   "include": [
     "src/**/*.ts",

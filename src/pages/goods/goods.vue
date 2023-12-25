@@ -4,7 +4,8 @@ import { getGoodsByIdAPI } from '@/services/goods';
 import type { GoodsResult } from '@/types/goods';
 import { onLoad } from '@dcloudio/uni-app';
 import ServicePanel from './components/ServicePanel.vue';
-import type { SkuPopupInstance, SkuPopupLocaldata } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup';
+import { postMemberCartAPI } from '@/services/cart';
+import type { SkuPopupEvent, SkuPopupInstance, SkuPopupLocaldata } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup';
 const query = defineProps<{
   id:string
 }>()
@@ -73,6 +74,15 @@ const skuPopupRef = ref<SkuPopupInstance>()
 const selectArrText = computed(()=>{
   return skuPopupRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
 })
+
+// 添加购物车事件
+const onAddCart = async(ev:SkuPopupEvent) =>{
+  await postMemberCartAPI({skuId:ev._id,count:ev.buy_num})
+  uni.showToast({
+    title:'添加成功'
+  })
+  isShowSku.value = false
+}
 
 const onSwiperChange = (ev)=>{
   currentPoint.value = ev.detail.current
@@ -211,6 +221,7 @@ onLoad(()=>{
   v-model="isShowSku" 
   :localdata="localdata" 
   :mode="mode"
+  @add-cart="onAddCart"
   add-cart-background-color="#FFA868"
   buy-now-background-color="#27BA9B"
   ref="skuPopupRef"
